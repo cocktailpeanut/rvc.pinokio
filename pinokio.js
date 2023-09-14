@@ -6,7 +6,7 @@ const exists = (filepath) => {
 }
 module.exports = {
   title: "RVC",
-  description: "Retrieval-based-Voice-Conversion-WebUI",
+  description: "1 Click Installer for Retrieval-based-Voice-Conversion-WebUI (https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI)",
   icon: "icon.png",
   menu: async (kernel) => {
     let installed = await exists(path.resolve(__dirname, "app", "env"))
