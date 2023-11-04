@@ -72,6 +72,11 @@ module.exports = async (kernel) => {
 
 
   return {
+    "requires": [{
+      "type": "conda",
+      "name": "ffmpeg",
+      "args": "-c conda-forge"
+    }],
     "run": [{
       "method": "shell.run",
       "params": {
