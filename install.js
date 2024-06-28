@@ -63,13 +63,18 @@ module.exports = async (kernel) => {
       path: "app/assets/" + p
     }
   })
-  let models = hubert.concat(pretrained).concat(uvr5_weights).concat(pretrained2).map((c) => {
+
+  let rmvpe = [{
+    url: "https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/rmvpe.pt",
+    path: "app/assets/rmvpe/rmvpe.pt"
+  }]
+
+  let models = hubert.concat(pretrained).concat(uvr5_weights).concat(pretrained2).concat(rmvpe).map((c) => {
     return {
       "method": "fs.download",
       "params": c
     }
   })
-
 
   return {
     "requires": [{
