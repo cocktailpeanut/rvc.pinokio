@@ -98,7 +98,7 @@ module.exports = () => ({
     {
       method: 'shell.enter',
       params: {
-        message: 'npx --yes torchcraft@0.0.14',
+        message: 'npx --yes torchcraft@0.0.16',
         on: [{ event: null, return: true }]
       }
     },
