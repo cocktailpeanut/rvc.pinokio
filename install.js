@@ -123,7 +123,10 @@ module.exports = async (kernel) => {
     }, {
       "method": "shell.enter",
       "params": {
-        "message": "pip install -r requirements.txt",
+        "message": [
+          "python -m pip install pip==24.0",
+          "pip install -r requirements.txt"
+        ],
         "on": [{
           "event": null,
           "return": true
