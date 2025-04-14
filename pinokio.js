@@ -1,41 +1,100 @@
-const os = require('os')
-const fs = require('fs')
-const path = require("path")
-const exists = (filepath) => {
-  return new Promise(r=>fs.access(filepath, fs.constants.F_OK, e => r(!e)))
-}
+const path = require('path')
 module.exports = {
+  version: "3.0",
   title: "RVC",
   description: "1 Click Installer for Retrieval-based-Voice-Conversion-WebUI (https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI)",
   icon: "icon.png",
-  menu: async (kernel) => {
-    let installed = await exists(path.resolve(__dirname, "app", "env"))
-    if (installed) {
-      let session = (await kernel.loader.load(path.resolve(__dirname, "session.json"))).resolved
+  menu: async (kernel, info) => {
+    let installed = info.exists("app/env")
+    let running = {
+      install: info.running("install.js"),
+      start: info.running("start.js"),
+      update: info.running("update.js"),
+      reset: info.running("reset.js"),
+      link: info.running("link.js")
+    }
+    if (running.install) {
       return [{
-        when: "start.js",
-        on: "<i class='fa-solid fa-spin fa-circle-notch'></i> Running",
-        type: "label",
-        href: "start.js"
-      }, {
-        when: "start.js",
-        off: "<i class='fa-solid fa-power-off'></i> Launch",
-        href: "start.js?fullscreen=true&run=true",
-      }, {
-        when: "start.js",
-        on: (session && session.url ? "<i class='fa-solid fa-rocket'></i> Open Web UI" : null),
-        href: (session && session.url ? session.url : null),
-        target: "_blank"
-      }, {
-        when: "start.js",
-        on: "<i class='fa-solid fa-desktop'></i> Server",
-        href: "start.js?fullscreen=true"
+        default: true,
+        icon: "fa-solid fa-plug",
+        text: "Installing",
+        href: "install.js",
       }]
+    } else if (installed) {
+      if (running.start) {
+        let local = info.local("start.js")
+        if (local && local.url) {
+          return [{
+            default: true,
+            icon: "fa-solid fa-rocket",
+            text: "Open Web UI",
+            href: local.url,
+          }, {
+            icon: 'fa-solid fa-terminal',
+            text: "Terminal",
+            href: "start.js",
+          }]
+        } else {
+          return [{
+            default: true,
+            icon: 'fa-solid fa-terminal',
+            text: "Terminal",
+            href: "start.js",
+          }]
+        }
+      } else if (running.update) {
+        return [{
+          default: true,
+          icon: 'fa-solid fa-terminal',
+          text: "Updating",
+          href: "update.js",
+        }]
+      } else if (running.reset) {
+        return [{
+          default: true,
+          icon: 'fa-solid fa-terminal',
+          text: "Resetting",
+          href: "reset.js",
+        }]
+      } else if (running.link) {
+        return [{
+          default: true,
+          icon: 'fa-solid fa-terminal',
+          text: "Deduplicating",
+          href: "link.js",
+        }]
+      } else {
+        return [{
+          default: true,
+          icon: "fa-solid fa-power-off",
+          text: "Start",
+          href: "start.js",
+        }, {
+          icon: "fa-solid fa-plug",
+          text: "Update",
+          href: "update.js",
+        }, {
+          icon: "fa-solid fa-plug",
+          text: "Install",
+          href: "install.js",
+        }, {
+          icon: "fa-solid fa-file-zipper",
+          text: "<div><strong>Save Disk Space</strong><div>Deduplicates redundant library files</div></div>",
+          href: "link.js",
+        }, {
+          icon: "fa-regular fa-circle-xmark",
+          text: "<div><strong>Reset</strong><div>Revert to pre-install state</div></div>",
+          href: "reset.js",
+          confirm: "Are you sure you wish to reset the app?"
+
+        }]
+      }
     } else {
       return [{
-        html: '<i class="fa-solid fa-plug"></i> Install',
-        type: "link",
-        href: "install.js?run=true&fullscreen=true"
+        default: true,
+        icon: "fa-solid fa-plug",
+        text: "Install",
+        href: "install.js",
       }]
     }
   }
