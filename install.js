@@ -36,7 +36,7 @@ module.exports = {
       params: {
         path: "app",
         "_": [ "lj1995/VoiceConversionWebUI" ],
-        "include": '"*.pth" "*.pt" "*.onnx" ".gitignore',
+        "include": '"*.pth" "*.pt" "*.onnx"',
         "exclude":'"rmvpe.onnx" "rmvpe.pt" "hubert_base.pt"',
         "local-dir": "assets"
       }
