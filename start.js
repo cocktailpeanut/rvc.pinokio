@@ -10,7 +10,7 @@ module.exports = {
         },
         path: "app",
         message: [
-          "{{platform === 'win32' && gpu === 'amd' ? 'python infer-web.py --dml --noautoopen --colab' : 'python infer-web.py --noautoopen --colab'}}",
+          "{{platform === 'win32' && gpu === 'amd' ? 'python infer-web.py --dml --noautoopen' : 'python infer-web.py --noautoopen'}}",
         ],
         on: [{
           "event": "/http:\/\/\\S+/",
